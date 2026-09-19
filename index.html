@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For my Bestie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ================= PAGE 1: title, typing message, button ================= -->
+  <section class="screen intro" id="intro" data-title="For my Bestie">
+
+    <!-- Decorative hearts (hidden from screen readers) -->
+    <div class="hearts" aria-hidden="true">
+      <svg class="heart h1" viewBox="0 0 32 29"><path d="M23.6 0c-3.4 0-6.3 2.1-7.6 5.1C14.7 2.1 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.6 6.1-8.7 16-11.5 16-20.6C32 3.8 28.2 0 23.6 0z"/></svg>
+      <svg class="heart h2" viewBox="0 0 32 29"><path d="M23.6 0c-3.4 0-6.3 2.1-7.6 5.1C14.7 2.1 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.6 6.1-8.7 16-11.5 16-20.6C32 3.8 28.2 0 23.6 0z"/></svg>
+      <svg class="heart h3" viewBox="0 0 32 29"><path d="M23.6 0c-3.4 0-6.3 2.1-7.6 5.1C14.7 2.1 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.6 6.1-8.7 16-11.5 16-20.6C32 3.8 28.2 0 23.6 0z"/></svg>
+      <svg class="heart h4" viewBox="0 0 32 29"><path d="M23.6 0c-3.4 0-6.3 2.1-7.6 5.1C14.7 2.1 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.6 6.1-8.7 16-11.5 16-20.6C32 3.8 28.2 0 23.6 0z"/></svg>
+      <svg class="heart h5" viewBox="0 0 32 29"><path d="M23.6 0c-3.4 0-6.3 2.1-7.6 5.1C14.7 2.1 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.6 6.1-8.7 16-11.5 16-20.6C32 3.8 28.2 0 23.6 0z"/></svg>
+    </div>
+
+    <main class="page">
+      <h1 class="title">
+        <span class="line small">FOR THE CUTEST</span>
+        <span class="line small">AND ONLY FEMALE BESTFRIEND</span>
+        <span class="line big">OF ME!</span>
+      </h1>
+
+      <!-- The typing message is filled in by script.js (edit the MESSAGE text there) -->
+      <div class="note" id="note"></div>
+
+      <button class="go" id="go" type="button" disabled>Click only if you are ready</button>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 2: the question (heart pops, then Yes / No) ================= -->
+  <section class="screen screen-question" id="screen-question" data-title="One question for you" hidden>
+    <main class="center-page">
+      <div class="pop-heart" id="pop-heart" aria-hidden="true">
+        <svg class="pop-heart-shape" viewBox="0 0 32 29"><path d="M23.6 0c-3.4 0-6.3 2.1-7.6 5.1C14.7 2.1 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 20.6 6.1-8.7 16-11.5 16-20.6C32 3.8 28.2 0 23.6 0z"/></svg>
+        <!-- little hearts that burst out of the big one are added by script.js -->
+      </div>
+
+      <h1 class="title question-title" id="question-title" tabindex="-1">First of All... Will You take oath to become my female bestfriend forever?</h1>
+
+      <div class="answers">
+        <button class="go" id="yes" type="button">Yes</button>
+        <button class="go go-no" id="no" type="button">No</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= "NO" PAGE: angry and sad ================= -->
+  <section class="screen screen-no" id="screen-no" data-title="How dare you" hidden>
+    <!-- Falling tears (hidden from screen readers) -->
+    <div class="tears" aria-hidden="true">
+      <span style="--x: 6%;  --t: 6.5s; --d: 0s"></span>
+      <span style="--x: 19%; --t: 8s;   --d: 1.8s"></span>
+      <span style="--x: 33%; --t: 6s;   --d: 0.7s"></span>
+      <span style="--x: 47%; --t: 7.5s; --d: 3s"></span>
+      <span style="--x: 61%; --t: 6.8s; --d: 1.1s"></span>
+      <span style="--x: 74%; --t: 8.2s; --d: 2.4s"></span>
+      <span style="--x: 86%; --t: 6.3s; --d: 0.3s"></span>
+      <span style="--x: 94%; --t: 7.2s; --d: 3.6s"></span>
+    </div>
+
+    <main class="center-page no-page">
+      <h1 class="no-title" id="no-title" tabindex="-1">How Dare You to say That????????</h1>
+      <button class="go go-soft" id="retry" type="button">Let me change my answer</button>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 3: memories (appears after she says Yes) ================= -->
+  <section class="screen memories" id="memories" data-title="Some memories of us" hidden>
+    <main class="memories-page">
+      <h1 class="title memories-title" id="memories-title" tabindex="-1">
+        <span class="line">SOME MEMORIES</span>
+        <span class="line">OF US</span>
+      </h1>
+
+      <!-- Photos and videos are filled in by script.js (edit the MEMORIES list there) -->
+      <section class="gallery" id="gallery" aria-label="Photos and videos of us"></section>
+
+      <!-- Your message is filled in by script.js (edit FINAL_MESSAGE there) -->
+      <section class="message-note" id="final-message" aria-label="A message for you"></section>
+
+      <!-- Goes to page 4 -->
+      <div class="next-wrap">
+        <button class="go" id="next" type="button">Continue to see more</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 4: what you are for me ================= -->
+  <section class="screen truths" id="screen-truths" data-title="What you are for me" hidden>
+    <main class="truths-page">
+      <h1 class="title truths-title" id="truths-title" tabindex="-1">
+        <span class="line">WHAT YOU ARE</span>
+        <span class="line">FOR ME</span>
+      </h1>
+      <p class="lead">Not compliments. Just facts.</p>
+
+      <!-- The notes are filled in by script.js (edit the TRUE_THINGS list there) -->
+      <section class="truth-grid" id="truth-grid" aria-label="What you are for me"></section>
+
+      <!-- Goes to page 5 -->
+      <div class="next-wrap">
+        <button class="go" id="next-truths" type="button">Continue to see more</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 5: my promise to you (the oath, returned) ================= -->
+  <section class="screen screen-page5 oath" id="screen-page5" data-title="My promise to you" hidden>
+    <main class="oath-page">
+      <h1 class="title oath-title" id="page5-title" tabindex="-1">
+        <span class="line">NOW IT'S MY TURN</span>
+        <span class="line">TO PROMISE YOU</span>
+      </h1>
+      <p class="lead">You took the oath first. Here's mine back to you.</p>
+
+      <!-- The promises are filled in by script.js (edit the OATH_PROMISES list there) -->
+      <ol class="oath-list" id="oath-list" aria-label="My promises to you"></ol>
+
+      <div class="seal-wrap" id="seal-wrap">
+        <button class="seal" id="seal" type="button" aria-pressed="false">
+          <span class="seal-ring">
+            <span class="seal-text">SEAL<br>IT</span>
+          </span>
+        </button>
+        <p class="seal-hint" id="seal-hint">Tap the seal to make it official</p>
+
+        <div class="sealed-msg" id="sealed-msg" hidden aria-live="polite">
+          <span class="pinky" aria-hidden="true">🤙💕</span>
+          <p>Promise sealed. Forever your bestfriend.</p>
+        </div>
+      </div>
+
+      <div class="next-wrap">
+        <button class="go" id="next-oath" type="button" hidden>Continue to see more</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 6: my shayari for you ================= -->
+  <section class="screen shayari" id="screen-shayari" data-title="My shayari for you" hidden>
+    <main class="shayari-page">
+      <h1 class="title shayari-title" id="shayari-title" tabindex="-1">
+        <span class="line">MY SHAYARI</span>
+        <span class="line">FOR YOU</span>
+      </h1>
+
+      <!-- The shayari is filled in by script.js (edit the SHAYARI list there) -->
+      <section class="shayari-card" id="shayari-card" aria-label="My shayari for you"></section>
+
+      <div class="next-wrap">
+        <button class="go" id="next-shayari" type="button">Continue to see more</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 7: a letter for you ================= -->
+  <section class="screen letter" id="screen-letter" data-title="A letter for you" hidden>
+    <main class="letter-page">
+      <h1 class="title letter-title" id="letter-title" tabindex="-1">
+        <span class="line">A LETTER</span>
+        <span class="line">FOR YOU</span>
+      </h1>
+
+      <!-- The letter is filled in by script.js (edit the LETTER paragraphs and LETTER_SIGNATURE there) -->
+      <section class="letter-card" id="letter-card" aria-label="A letter for you"></section>
+
+      <div class="next-wrap">
+        <button class="go" id="next-letter" type="button">Continue to see more</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= PAGE 8: the final page ================= -->
+  <section class="screen finale" id="screen-finale" data-title="Forever" hidden>
+    <main class="center-page finale-page">
+      <div class="heart-stage">
+        <canvas class="heart-canvas" id="heart-canvas" aria-hidden="true"></canvas>
+      </div>
+
+      <h1 class="title finale-title" id="finale-title" tabindex="-1">
+        <span class="line">FOREVER</span>
+        <span class="line">MY BESTFRIEND</span>
+      </h1>
+
+      <!-- The closing lines are filled in by script.js (edit FINALE_MESSAGE there) -->
+      <div class="finale-message" id="finale-message"></div>
+
+      <button class="go go-soft-2" id="replay" type="button">Watch it again</button>
+    </main>
+  </section>
+
+  <!-- Music on/off button (needs your song at music/song.mp3). Shown after the first button is clicked. -->
+  <button class="music" id="music" type="button" aria-pressed="false" aria-label="Music" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>
+      <path class="waves" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path class="slash" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

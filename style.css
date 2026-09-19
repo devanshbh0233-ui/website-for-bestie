@@ -1,0 +1,731 @@
+:root {
+  --bg: #FFD3E2;        /* strawberry milk */
+  --paper: #FFF8FB;     /* note paper */
+  --ink: #4A1D4F;       /* grape */
+  --accent: #FF5C93;    /* bubblegum */
+  --butter: #FFD86B;
+  --mint: #B9EAD3;
+  --display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --hand: "Patrick Hand", "Segoe Print", "Comic Sans MS", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+/* Makes the hidden attribute always work */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--hand);
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* The angry "No" screen turns the whole page dark */
+body.mood-no { background: #24142F; color: #FFD9D9; }
+
+/* Every screen fades in when it appears */
+.screen.enter { animation: fade-in 0.5s ease both; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Titles that get focus by script don't need an outline */
+h1[tabindex="-1"]:focus { outline: none; }
+
+/* ---------- Title style (used on most screens) ---------- */
+.title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.02;
+  text-shadow: 0.05em 0.06em 0 var(--accent);
+  transform: rotate(-2deg);
+}
+.title .line { display: block; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* =====================================================================
+   PAGE 1
+   ===================================================================== */
+.intro {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1.1rem;
+  transition: opacity 0.35s ease;
+}
+.intro.leaving { opacity: 0; }
+
+.page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 40rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.title .big   { font-size: clamp(3rem, 13vw, 6.2rem); letter-spacing: 0.01em; }
+.title .small { font-size: clamp(1.15rem, 5.2vw, 2rem); margin: 0.2em 0 0.15em; letter-spacing: 0.03em; }
+
+/* ---------- Typing note ---------- */
+.note {
+  width: 100%;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 1.2rem;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 1.5rem 1.4rem;
+  text-align: left;
+  font-size: clamp(1.25rem, 4.6vw, 1.55rem);
+  line-height: 1.55;
+  min-height: 4rem;
+}
+.note .message { margin: 0; }
+.word { display: inline-block; white-space: nowrap; }
+.ch { visibility: hidden; }
+.ch.on { visibility: visible; }
+
+/* Blinking pen line at the end of what has been typed (takes no space) */
+.caret {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 1em;
+  vertical-align: -0.12em;
+}
+.caret::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--accent);
+  animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- Button (used on every screen) ---------- */
+.go {
+  font-family: var(--display);
+  font-size: clamp(1.1rem, 4.4vw, 1.4rem);
+  color: var(--ink);
+  background: var(--accent);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.85em 1.8em;
+  box-shadow: 4px 4px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.go:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.go:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.go:focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
+
+/* Locked until the typing is done */
+.go:disabled {
+  background: transparent;
+  border-style: dashed;
+  color: rgba(74, 29, 79, 0.6);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* One little pop when it unlocks */
+.go.ready { animation: pop 0.5s ease; }
+@keyframes pop {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Hearts ---------- */
+.hearts { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.heart { position: absolute; }
+.h1 { width: 3.2rem; top: 6%;  left: 7%;  fill: var(--accent); transform: rotate(-14deg); }
+.h2 { width: 2rem;   top: 14%; right: 9%; fill: var(--butter); transform: rotate(12deg); }
+.h3 { width: 2.6rem; bottom: 12%; left: 10%; fill: var(--mint); transform: rotate(10deg); }
+.h4 { width: 3.6rem; bottom: 7%; right: 8%; fill: var(--accent); transform: rotate(-8deg); }
+.h5 { width: 1.5rem; top: 46%; right: 4%; fill: var(--butter); transform: rotate(18deg); }
+
+
+/* =====================================================================
+   PAGE 3 (memories)
+   ===================================================================== */
+.memories { padding: 3rem 1.1rem 5rem; }
+
+.memories-page {
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+.memories-title {
+  margin: 0 auto;
+  text-align: center;
+  font-size: clamp(2.6rem, 11vw, 5.6rem);
+}
+
+/* ---------- Photos and videos ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+  gap: 2.4rem 1.8rem;
+  align-items: start;
+  margin: 3.6rem 0 4rem;
+}
+
+.memory {
+  margin: 0;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 0.7rem;
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 0.6rem;
+}
+.memory:nth-child(odd)  { transform: rotate(-1.4deg); }
+.memory:nth-child(even) { transform: rotate(1.2deg); }
+.memory:nth-child(3n)   { transform: rotate(-0.5deg); }
+
+.memory img,
+.memory video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.3rem;
+}
+.memory video {
+  background: #000;
+  max-height: 32rem;
+  object-fit: contain;
+}
+
+/* Shown when a photo or video file can't be found yet */
+.memory .empty {
+  aspect-ratio: 4 / 3;
+  background: var(--mint);
+  border-radius: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.memory figcaption {
+  padding: 0.7rem 0.3rem 0.2rem;
+  font-size: 1.25rem;
+  line-height: 1.35;
+}
+
+/* ---------- Your message ---------- */
+.message-note {
+  max-width: 40rem;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 1.2rem;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 1.8rem 1.6rem;
+  text-align: left;
+  font-size: clamp(1.25rem, 4.6vw, 1.55rem);
+  line-height: 1.55;
+}
+.message-note p { margin: 0 0 1em; }
+.message-note p:last-child { margin-bottom: 0; }
+
+/* ---------- Continue button ---------- */
+.next-wrap { text-align: center; margin-top: 3rem; }
+
+/* ---------- Music on/off button (stays on screen after the first click) ---------- */
+.music {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 5;
+  width: 3.4rem;
+  height: 3.4rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--ink);
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.music svg { width: 1.7rem; height: 1.7rem; }
+.music[aria-pressed="true"] { background: var(--accent); }
+.music[aria-pressed="true"] .slash { display: none; }
+.music[aria-pressed="false"] .waves { display: none; }
+.music:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.music:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+
+
+/* =====================================================================
+   PAGE 2: the question
+   ===================================================================== */
+.center-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.8rem;
+  text-align: center;
+}
+.center-page p { margin: 0; font-size: 1.3rem; }
+
+/* The big heart pops in, then keeps a gentle heartbeat */
+.pop-heart { position: relative; width: 6.5rem; height: 6rem; }
+.pop-heart-shape {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: var(--accent);
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  animation: pop-heart 0.8s ease both, beat 1.5s ease-in-out 1s infinite;
+}
+@keyframes pop-heart {
+  0%   { transform: scale(0) rotate(-20deg); }
+  60%  { transform: scale(1.25) rotate(6deg); }
+  80%  { transform: scale(0.92) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
+/* Little hearts that fly out of a heart or the seal (added by script.js) */
+.burst-heart {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--s);
+  height: calc(var(--s) * 0.906);
+  margin: calc(var(--s) * -0.45) 0 0 calc(var(--s) * -0.5);
+  fill: var(--c);
+  opacity: 0;
+  pointer-events: none;
+  animation: burst 1.2s ease-out 0.35s both;
+}
+@keyframes burst {
+  0%   { opacity: 1; transform: translate(0, 0) scale(0) rotate(0deg); }
+  70%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1) rotate(var(--rot)); }
+}
+
+/* The question and the buttons pop in one after the other */
+.question-title {
+  font-size: clamp(2rem, 8.5vw, 3.9rem);
+  line-height: 1.08;
+  animation: pop-in 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) 0.7s both;
+}
+.answers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  animation: pop-in 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) 1.5s both;
+}
+.go-no { background: var(--paper); }
+
+@keyframes pop-in {
+  from { opacity: 0; scale: 0.6; }
+  to   { opacity: 1; scale: 1; }
+}
+
+
+/* =====================================================================
+   "NO" PAGE: angry and sad
+   ===================================================================== */
+.screen-no { position: relative; overflow: hidden; }
+.no-page { position: relative; z-index: 1; gap: 2.4rem; }
+
+.no-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.08;
+  font-size: clamp(2.3rem, 9.5vw, 4.6rem);
+  color: #FF7A7A;
+  text-shadow: 0.04em 0.05em 0 #7A1230;
+  overflow-wrap: anywhere;
+  animation: shake 0.8s ease both, tremble 3.2s ease-in-out 0.8s infinite;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 50%, 90% { transform: translateX(-10px) rotate(-1deg); }
+  30%, 70%      { transform: translateX(10px) rotate(1deg); }
+}
+@keyframes tremble {
+  0%, 100% { transform: rotate(-0.6deg); }
+  50%      { transform: rotate(0.6deg); }
+}
+
+.go-soft {
+  background: transparent;
+  color: #FFD9D9;
+  border-color: #FFD9D9;
+  box-shadow: 4px 4px 0 #7A1230;
+}
+.go-soft:hover:not(:disabled) { background: rgba(255, 217, 217, 0.15); box-shadow: 6px 6px 0 #7A1230; }
+.go-soft:focus-visible { outline-color: #FFD9D9; }
+
+/* Falling tears */
+.tears { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.tears span {
+  position: absolute;
+  top: -24px;
+  left: var(--x);
+  width: 14px;
+  height: 14px;
+  background: #8EC9FF;
+  border-radius: 0 50% 50% 50%;
+  opacity: 0;
+  animation: fall var(--t) linear var(--d) infinite;
+}
+@keyframes fall {
+  0%   { transform: translateY(0) rotate(45deg); opacity: 0; }
+  10%  { opacity: 0.75; }
+  85%  { opacity: 0.75; }
+  100% { transform: translateY(110vh) rotate(45deg); opacity: 0; }
+}
+
+
+/* =====================================================================
+   PAGE 4: things that are true about you
+   ===================================================================== */
+.truths { padding: 3rem 1.1rem 5rem; }
+
+.truths-page {
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+.truths-title {
+  margin: 0 auto;
+  text-align: center;
+  font-size: clamp(2.4rem, 9.5vw, 5rem);
+}
+
+.lead { margin: 1.4rem 0 0; text-align: center; font-size: 1.4rem; }
+
+.truth-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
+  gap: 2.6rem 1.8rem;
+  align-items: start;
+  margin: 3.4rem 0 4rem;
+}
+
+/* Each note is hidden until she scrolls to it, then it pops onto the page */
+.truth {
+  position: relative;
+  padding: 1.9rem 1.4rem 1.6rem;
+  border: 3px solid var(--ink);
+  border-radius: 0.3rem;
+  box-shadow: 4px 4px 0 var(--ink);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  text-align: left;
+  opacity: 0;
+}
+.truth.show { opacity: 1; animation: note-pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+@keyframes note-pop {
+  from { opacity: 0; scale: 0.6; }
+  to   { opacity: 1; scale: 1; }
+}
+
+/* A strip of tape on top of each note */
+.truth::before {
+  content: "";
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  width: 4.2rem;
+  height: 1.3rem;
+  background: rgba(255, 216, 107, 0.85);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.truth:nth-child(4n+1) { background: var(--paper); rotate: -1.6deg; }
+.truth:nth-child(4n+2) { background: var(--mint);  rotate: 1.2deg; }
+.truth:nth-child(4n+3) { background: #FFE9A6;      rotate: -0.7deg; }
+.truth:nth-child(4n)   { background: #E4D4F7;      rotate: 1.7deg; }
+
+
+/* =====================================================================
+   PAGE 5: my promise to you (the oath, returned)
+   ===================================================================== */
+.oath { padding: 3rem 1.1rem 6rem; }
+
+.oath-page {
+  width: 100%;
+  max-width: 42rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.oath-title { font-size: clamp(2.15rem, 8.3vw, 4.3rem); }
+
+/* ---------- The list of promises ---------- */
+.oath-list {
+  counter-reset: oath;
+  list-style: none;
+  margin: 3rem 0 3.6rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  text-align: left;
+}
+
+.oath-item {
+  position: relative;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 0.9rem;
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 1.1rem 1.3rem 1.1rem 3.6rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  opacity: 0;
+}
+.oath-item.show { opacity: 1; animation: note-pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+
+.oath-item:nth-child(odd)  { rotate: -0.6deg; }
+.oath-item:nth-child(even) { rotate: 0.6deg; }
+
+/* Numbered circle on the left of each promise */
+.oath-item::before {
+  counter-increment: oath;
+  content: counter(oath);
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.9rem;
+  height: 1.9rem;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ---------- The wax seal ---------- */
+.seal-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.seal {
+  position: relative;
+  z-index: 1;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 4px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.seal:hover:not([aria-pressed="true"]) {
+  transform: translate(-2px, -2px) rotate(-4deg);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+.seal:focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
+
+.seal-ring {
+  width: 6.6rem;
+  height: 6.6rem;
+  border-radius: 50%;
+  border: 2px dashed var(--ink);
+  display: grid;
+  place-items: center;
+}
+.seal-text {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+/* Once tapped, the seal "stamps" down and locks */
+.seal[aria-pressed="true"] {
+  animation: stamp 0.4s ease both;
+  cursor: default;
+}
+@keyframes stamp {
+  0%   { transform: scale(1) rotate(0deg); }
+  40%  { transform: scale(1.15) rotate(-8deg); }
+  70%  { transform: scale(0.92) rotate(4deg); }
+  100% { transform: scale(1) rotate(-6deg); }
+}
+
+.seal-hint { margin: 0; font-size: 1.05rem; }
+
+.sealed-msg {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.2rem;
+  animation: pop-in 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.sealed-msg .pinky { display: block; margin-bottom: 0.4rem; font-size: 2.4rem; }
+.sealed-msg p { margin: 0; font-size: 1.3rem; }
+
+
+/* =====================================================================
+   PAGE 6: my shayari for you
+   ===================================================================== */
+.shayari { padding: 3rem 1.1rem 5rem; }
+
+.shayari-page {
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.shayari-title { font-size: clamp(2.1rem, 8.3vw, 4.2rem); }
+
+.shayari-card {
+  margin: 3rem 0 3.6rem;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 1.2rem;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 2.2rem 1.8rem;
+  text-align: center;
+  font-size: clamp(1.3rem, 4.8vw, 1.65rem);
+  line-height: 1.7;
+  font-style: italic;
+}
+.shayari-card p { margin: 0 0 0.3em; }
+.shayari-card p:last-child { margin-bottom: 0; }
+
+
+/* =====================================================================
+   PAGE 7: a letter for you
+   ===================================================================== */
+.letter { padding: 3rem 1.1rem 5rem; }
+
+.letter-page {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.letter-title { font-size: clamp(2.1rem, 8.3vw, 4.2rem); }
+
+.letter-card {
+  margin: 3rem 0 3.6rem;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 1.2rem;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 2rem 1.8rem;
+  text-align: left;
+  font-size: clamp(1.2rem, 4.4vw, 1.5rem);
+  line-height: 1.6;
+}
+.letter-card p { margin: 0 0 1em; }
+.letter-signature {
+  margin-top: 1.6em !important;
+  margin-bottom: 0 !important;
+  font-style: italic;
+  text-align: right;
+}
+
+
+/* =====================================================================
+   PAGE 8: the final page
+   ===================================================================== */
+.finale {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #FFB3D1 0%, #FF7FAC 55%, #E6217E 100%);
+}
+
+.finale-page {
+  position: relative;
+  z-index: 1;
+  gap: 1.4rem;
+}
+
+/* The stage the particle heart is drawn on */
+.heart-stage {
+  position: relative;
+  width: min(88vw, 24rem);
+  aspect-ratio: 1 / 1;
+}
+.heart-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.finale-title {
+  font-size: clamp(2rem, 8vw, 3.6rem);
+  color: #FFF3F8;
+  text-shadow: 0.05em 0.06em 0 #B4157A;
+}
+
+.finale-message { max-width: 30rem; }
+.finale-message p { margin: 0 0 0.6em; font-size: 1.3rem; line-height: 1.5; color: #FFF3F8; }
+.finale-message p:last-child { margin-bottom: 0; }
+
+.go-soft-2 {
+  background: var(--paper);
+  margin-top: 0.6rem;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
