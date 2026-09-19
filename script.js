@@ -1,44 +1,4 @@
-/* =====================================================================
-   EDIT THIS PART.
 
-   The pages, in order:
-     Page 1  the typing message and the "Click only if you are ready" button
-     Page 2  the question (Yes or No). No opens the angry page.
-     Page 3  the memories (photos, videos and your message)
-     Page 4  "Things that are true about you" (notes that pop up as she scrolls)
-     Page 5  my promise to you (the oath, returned) — a list of promises + a seal
-     Page 6  my shayari for you
-     Page 7  a letter for you
-     Page 8  the final page — closing lines, a glowing particle heart, and a replay button
-
-   1) MESSAGE: the text that gets typed on page 1.
-   2) TYPING_SPEED: milliseconds per letter (bigger number = slower).
-   3) SONG_FILE: your song, saved inside a folder called "music".
-      It starts when she clicks the first button, repeats forever,
-      and stops while any video plays.
-   4) MEMORIES: your photos and videos, in the order they should appear.
-      - type is "photo" or "video"
-      - file is the path of the file inside your "photos" or "videos" folder
-      - caption is optional. Write a few words under the picture, or leave "".
-   5) FINAL_MESSAGE: the message shown below all the photos and videos.
-      Each line inside the [ ] becomes its own paragraph.
-   6) TRUE_THINGS: the notes on page 4. One line inside the [ ] = one note.
-      Add, remove or rewrite lines. Write the real things you feel.
-   7) OATH_PROMISES: the promises on page 5. One line inside the [ ] = one promise.
-      They appear one by one as she scrolls, like the notes on page 4.
-   8) SHAYARI: your shayari for page 6. Each line inside the [ ] is one line
-      of the shayari (it's shown as a poem, line by line).
-   9) LETTER: your letter for page 7. Each line inside the [ ] becomes its
-      own paragraph, same as FINAL_MESSAGE.
-   10) LETTER_SIGNATURE: how you sign off the letter (e.g. "Yours, Always").
-   11) FINALE_MESSAGE: the closing lines on page 8. Each line is its own
-       paragraph.
-   12) HEART_PARTICLE_COUNT / HEART_EDGE_COUNT: how densely packed the
-       glowing heart on page 8 is. They're further down, just above PAGE 8.
-
-   The question ("Will You take oath...") and the angry "How Dare You..."
-   words are written directly in index.html.
-   ===================================================================== */
 const MESSAGE =
   "Hey Masha, I know i hurt you most of time. You don't say that, but i know so. " +
   "This gift is only and only for you...... I hope you will enjoy it.";
@@ -118,9 +78,9 @@ const LETTER_SIGNATURE = "Yours, always.";
 
 // Each line inside the [ ] is shown as its own closing paragraph on page 8.
 const FINALE_MESSAGE = [
-  "This is where the pages end, but not where this ends.",
+  "This is where i end this gift, a heartfelt gift from bottom of my heart",
   "Thank you for being my person.",
-  "Forever my bestfriend. 💗"
+  "Love You And Thank You my bestfriend. 💗"
 ];
 /* ===================== END OF THE PART YOU EDIT ===================== */
 
@@ -580,19 +540,26 @@ function randomHeartPoint() {
 }
 
 /* --- Tune the look of the heart here ---
-   HEART_PARTICLE_COUNT = how packed the body is. 2800 gives a solid,
-     glowing heart. Drop to about 1500 if it feels slow on her phone,
-     or push to 4000 for an almost solid one.
-   HEART_EDGE_COUNT = the bright rim around the edge.
+   HEART_PARTICLE_COUNT = how packed the body is. 17000 gives a very
+     dense, near-solid heart of red/pink pixels. Drop to about 8000
+     if it feels slow on her phone.
+   HEART_EDGE_COUNT = a thin bright rim around the edge, mostly pink/red
+     (only a few particles are white, so the rim reads as a highlight,
+     not a white outline).
    EDGE_THICKNESS = how thick that rim is. Closer to 0 = thin and crisp
      (try -0.02), further from 0 = thick and glowy (try -0.10). */
-const HEART_PARTICLE_COUNT = 2800;
-const HEART_EDGE_COUNT = 1100;
-const EDGE_THICKNESS = -0.05;
-const HEART_SPARKLE_COUNT = 70;
+const HEART_PARTICLE_COUNT = 17000;
+const HEART_EDGE_COUNT = 2700;
+const EDGE_THICKNESS = -0.04;
+const HEART_SPARKLE_COUNT = 40;
 
-const HEART_PINKS = ["#FF1F6B", "#FF3D80", "#FF5C93", "#FF7FAC"];
-const HEART_EDGE_COLORS = ["#FFFFFF", "#FFE3EE", "#FFC2D9"];
+// Reds and pinks for the body — deep red/crimson mixed with hot pink
+const HEART_PINKS = [
+  "#B0002A", "#D4002E", "#E8103F", "#FF1F4D",
+  "#FF3D6B", "#FF5C93", "#FF7FAC", "#FF1F6B"
+];
+// The rim is mostly pink/red too, with just a few brighter highlights
+const HEART_EDGE_COLORS = ["#FF3D6B", "#FF7FAC", "#FFB3CB", "#FFFFFF"];
 
 let heartCtx = null;
 let heartParticles = [];
@@ -601,6 +568,14 @@ let heartFrame = 0;
 let heartAnimating = false;
 let heartResizeObserver = null;
 
+function pickEdgeColor() {
+  // Only about 1 in 8 edge particles is white — the rim should glow
+  // pink/red, not read as a white outline.
+  if (Math.random() < 0.12) return "#FFFFFF";
+  const reds = HEART_EDGE_COLORS.slice(0, 3);
+  return reds[Math.floor(Math.random() * reds.length)];
+}
+
 function makeParticle(point, isEdge) {
   return {
     homeX: point.x,
@@ -608,12 +583,10 @@ function makeParticle(point, isEdge) {
     angle: Math.random() * Math.PI * 2,
     driftRadius: isEdge ? 0.3 + Math.random() * 0.5 : 0.4 + Math.random() * 1.1,
     driftSpeed: 0.008 + Math.random() * 0.018,
-    size: isEdge ? 1 + Math.random() * 1.4 : 1.2 + Math.random() * 1.9,
-    color: isEdge
-      ? HEART_EDGE_COLORS[Math.floor(Math.random() * HEART_EDGE_COLORS.length)]
-      : HEART_PINKS[Math.floor(Math.random() * HEART_PINKS.length)],
+    size: isEdge ? 1 + Math.random() * 1.4 : 1.3 + Math.random() * 2.1,
+    color: isEdge ? pickEdgeColor() : HEART_PINKS[Math.floor(Math.random() * HEART_PINKS.length)],
     twinklePhase: Math.random() * Math.PI * 2,
-    twinkleAmount: isEdge ? 0.2 : 0.35
+    twinkleAmount: isEdge ? 0.2 : 0.3
   };
 }
 
