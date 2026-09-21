@@ -44,7 +44,7 @@
    words are written directly in index.html.
    ===================================================================== */
 const MESSAGE =
-  "Hey Masha, I know i hurt you most of time. You don't say that, but i know so. " +
+  "Hey Masha, I know i disappoint you most of time. You don't say that, but i know so. " +
   "This gift is only and only for you...... I hope you will enjoy it.";
 
 const TYPING_SPEED = 55;
