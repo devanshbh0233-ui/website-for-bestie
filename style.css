@@ -648,6 +648,41 @@ h1[tabindex="-1"]:focus { outline: none; }
 .shayari-card p { margin: 0 0 0.3em; }
 .shayari-card p:last-child { margin-bottom: 0; }
 
+/* hint under the locked "Continue" button on page 6 */
+.lock-hint { margin: 1rem 0 0; font-size: 1.05rem; opacity: 0.75; }
+.lock-hint[hidden] { display: none; }
+
+/* voice note player */
+.voice-caption { margin: 0 0 1.4rem !important; }
+.voice-player {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-style: normal;
+}
+.voice-play {
+  flex: none;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+.voice-play:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.voice-play svg { width: 1.6rem; height: 1.6rem; }
+.voice-play .icon-pause { display: none; }
+.voice-player.playing .icon-play { display: none; }
+.voice-player.playing .icon-pause { display: block; }
+.voice-seek { flex: 1; min-width: 0; accent-color: var(--ink); cursor: pointer; }
+.voice-time { flex: none; font-size: 1rem; min-width: 5.2ch; text-align: right; }
+.voice-missing { font-size: 1rem; font-style: normal; }
+
 
 /* =====================================================================
    PAGE 7: a letter for you
