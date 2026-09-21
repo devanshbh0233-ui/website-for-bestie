@@ -147,18 +147,30 @@
   </section>
 
   <!-- ================= PAGE 6: my shayari for you ================= -->
-  <section class="screen shayari" id="screen-shayari" data-title="My shayari for you" hidden>
+  <section class="screen shayari" id="screen-shayari" data-title="A voice note for you" hidden>
     <main class="shayari-page">
       <h1 class="title shayari-title" id="shayari-title" tabindex="-1">
-        <span class="line">MY SHAYARI</span>
+        <span class="line">A VOICE NOTE</span>
         <span class="line">FOR YOU</span>
       </h1>
 
-      <!-- The shayari is filled in by script.js (edit the SHAYARI list there) -->
-      <section class="shayari-card" id="shayari-card" aria-label="My shayari for you"></section>
+      <!-- The voice note file and caption are set in script.js (VOICE_NOTE_FILE, VOICE_CAPTION) -->
+      <section class="shayari-card voice-card" id="shayari-card" aria-label="A voice note for you">
+        <p class="voice-caption" id="voice-caption"></p>
+        <div class="voice-player" id="voice-player">
+          <button class="voice-play" id="voice-play" type="button" aria-label="Play voice note">
+            <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z" fill="currentColor"/></svg>
+          </button>
+          <input class="voice-seek" id="voice-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Voice note position">
+          <span class="voice-time" id="voice-time">0:00</span>
+        </div>
+        <p class="voice-missing" id="voice-missing" hidden>Voice note file not found. Check VOICE_NOTE_FILE in script.js.</p>
+      </section>
 
       <div class="next-wrap">
-        <button class="go" id="next-shayari" type="button">Continue to see more</button>
+        <button class="go" id="next-shayari" type="button" disabled>Continue to see more</button>
+        <p class="lock-hint" id="voice-lock-hint">Listen to the whole voice note to continue</p>
       </div>
     </main>
   </section>
