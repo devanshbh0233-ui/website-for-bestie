@@ -1,4 +1,48 @@
+/* =====================================================================
+   EDIT THIS PART.
 
+   The pages, in order:
+     Page 1  the typing message and the "Click only if you are ready" button
+     Page 2  the question (Yes or No). No opens the angry page.
+     Page 3  the memories (photos, videos and your message)
+     Page 4  "Things that are true about you" (notes that pop up as she scrolls)
+     Page 5  my promise to you (the oath, returned) — a list of promises + a seal
+     Page 6  my voice note for you
+     Page 7  a letter for you
+     Page 8  the final page — closing lines, a glowing particle heart, and a replay button
+
+   1) MESSAGE: the text that gets typed on page 1.
+   2) TYPING_SPEED: milliseconds per letter (bigger number = slower).
+   3) SONG_FILE: your song, saved inside a folder called "music".
+      It starts when she clicks the first button, repeats forever,
+      and stops while any video plays.
+   4) MEMORIES: your photos and videos, in the order they should appear.
+      - type is "photo" or "video"
+      - file is the path of the file inside your "photos" or "videos" folder
+      - caption is optional. Write a few words under the picture, or leave "".
+   5) FINAL_MESSAGE: the message shown below all the photos and videos.
+      Each line inside the [ ] becomes its own paragraph.
+   6) TRUE_THINGS: the notes on page 4. One line inside the [ ] = one note.
+      Add, remove or rewrite lines. Write the real things you feel.
+   7) OATH_PROMISES: the promises on page 5. One line inside the [ ] = one promise.
+      They appear one by one as she scrolls, like the notes on page 4.
+   8) VOICE_NOTE_FILE / VOICE_CAPTION: your voice note for page 6. Save the
+      audio inside the "music" folder and put its name in VOICE_NOTE_FILE.
+      VOICE_CAPTION is the short line shown above the play button.
+      REQUIRE_FULL_VOICE_NOTE = true keeps the Continue button locked until
+      she has listened to the whole voice note once.
+   9) LETTER: your letter for page 7. Each line inside the [ ] becomes its
+      own paragraph, same as FINAL_MESSAGE.
+   10) LETTER_SIGNATURE: how you sign off the letter (e.g. "Yours, Always").
+   11) FINALE_MESSAGE: the closing lines on page 8. Each line is its own
+       paragraph.
+   12) HEART_PARTICLE_COUNT / HEART_EDGE_COUNT / HEART_ROTATE_SECONDS: how
+       densely packed the heart on page 8 is and how fast it spins. They're
+       further down, just above the heart code in PAGE 8.
+
+   The question ("Will You take oath...") and the angry "How Dare You..."
+   words are written directly in index.html.
+   ===================================================================== */
 const MESSAGE =
   "Hey Masha, I know i hurt you most of time. You don't say that, but i know so. " +
   "This gift is only and only for you...... I hope you will enjoy it.";
@@ -56,14 +100,14 @@ const OATH_PROMISES = [
   "I promise that i will apologize and listen to you, when the mistake is caused by me, instead my ego coming between us."
 ];
 
-// Write this in your own words — this is a sample so the page isn't empty.
-// Each line inside the [ ] is shown as its own line of the shayari.
-const SHAYARI = [
-  "Har raaste mein tu mile, ye zaruri nahi,",
-  "Par jahan bhi mile, wahan sukoon zaruri hai.",
-  "Tu meri kahaniyon ka sabse pyara kirdaar hai,",
-  "Meri zindagi mein tera hona hi ek tyohaar hai."
-];
+// Page 6: your voice note. Save the audio file (mp3, m4a, wav or ogg) inside
+// the "music" folder, then put its exact file name here.
+const VOICE_NOTE_FILE = "music/voice-note.mp3";
+// The short line shown above the play button. Use "" for no caption.
+const VOICE_CAPTION = "Press play. This one is in my own voice.";
+// true = she can't continue to page 7 until she has listened to the whole voice note once.
+// false = the Continue button works right away.
+const REQUIRE_FULL_VOICE_NOTE = true;
 
 // Write your real letter here. Each line inside the [ ] becomes its own paragraph.
 const LETTER = [
@@ -71,7 +115,22 @@ const LETTER = [
   "I don't really know how to start this letter, so I'll just start.",
   "There are things I don't say out loud, not because I don't feel them, but because some things are easier to write than to say. So I'm writing them here, for you.",
   "Thank you for staying, even on the days I didn't make it easy. Thank you for being the one constant when everything else kept changing.",
-  "This whole thing, this whole gift, is just me trying to put into words what I feel every day but never fully say."
+  "This whole thing, this whole gift, is just me trying to put into words what I feel every day but never fully say.",
+  "hey I hope tune ye sb padh liya hoga and maybe tujhe acha lga hoga nahi lga to next time I will or acha krne ka",
+  "ye sb krne sirf ek hi reason tha ki, me tujhe khush nhi rkh pata like humesha doubt, trust issues and humesha puchna kya kyu kese kaha thi? I know tujhe ye sb psnd nhi h and I am sorry itna pagal hone ke liye and I will surely become a man than a emotional guy which I am right now...",
+  "tujhe yaad h humari mulaqat and all the things.. ek cheez ka humesha ghum rhega wese ki me tere liye pehli web gift nhi kr paya like tujhe pehla web gift Saksham ne diya tha but koi na first come I is not imp I guess so.. but koi na",
+  "ab point pe aate h jiske liye letter likh rha hu",
+  "tujhe yaad h hum kab bestfriends bne the?? nahi yaad to yaad dilata hu mein tujhe ..",
+  "tune ek bheji thi bestfriends ke liye jo nhi chlti h wo wali to I asked \"ME tera bestfriend?\" for first time I was like ki bhai yr Anubhav rehan ko chorke koi ladki yrrr koi ladki mujhe bestfriend bnana chahti h. first time aesa lga tha ki, haan now I am become a nice guy and I was itna happy ki kay btau yr yaad krta hu to hasi aati h ki, how silly mene ek min me boldiya bina soche ki \"Han kyu nhi bhai bestfriends aajse :)\"",
+  "you know what mene kabhi socha nhi tha ek purani dost mera itna saath degi and literally yr....... I love you so much my bestie.... I love you yrr.. I never wanna lose you my sister my bestie my MASHA...",
+  "tu kabhi jaiyo mt chorke please.. I know you also love me too tu nahi bol pati kyuki tera ek bf to tere pass restrictios h kya bolna h kya krna h etc etc.. I know that... I understand your situation ache se",
+  "tu bohot achi ldki h yr",
+  "and me humesha koshish krta hu ki yr tu humesha khush rhe, jb tujeh dhukh sataye tb me hu tere saath mein humesha time nikalta hu tere liye",
+  "and yr aesa nahi h ki me sirf tere liye special chize nahi krta bohot kuch sirf aajtk tere liye kiya h like for proof wo shayari and ye web wali and tere liye humesha teyar rehena tu agr raatko bhi call kregi to me teyar rhunga help ke liye..... and tujhe yaad hoga tune or mene milke web bnaya tha nitin ke bday pe tb mene apni padhayi chor di thi lekin nitin ko tb bhi mujhse nafrat hi rhi he doesn't like me at all I know that but koi na jiju nahi smjhenge... mene jbse tera relation chalu hua h koshish kri h ki wapis nitin se dosti krlu he never let me to do so but leave it",
+  "mene tere liye apni padhayi chordeta hu break manage krleta hua and shayari gifts...",
+  "tu imp h yr mere liye roos mt jaya kr mere se disappoint mt hoya kr",
+  "and finally yr sorry aj tk jo bhi kiya h mene and ye web sirf tujhe yaad dilane ke liye ki tu kaash h mere liye and tu or mein humesha saath rhenge and tu mere liye kya h .. ab me tere liye kya hu ye tujhe pta h sirf....",
+  "I LOVE YOU MASHA....."
 ];
 
 const LETTER_SIGNATURE = "Yours, always.";
@@ -228,11 +287,16 @@ const song = new Audio(SONG_FILE);
 song.loop = true; // play on repeat
 song.volume = SONG_VOLUME;
 
+// The voice note on page 6 (the song pauses while it plays)
+const voice = new Audio(VOICE_NOTE_FILE);
+voice.preload = "metadata";
+
 let songOn = false;       // does she want the song on? (turned on by the first button)
 let songMissing = false;  // true if the song file could not be found
 
 function anyVideoPlaying() {
-  return Array.from(document.querySelectorAll("video")).some((v) => !v.paused && !v.ended);
+  const videoPlaying = Array.from(document.querySelectorAll("video")).some((v) => !v.paused && !v.ended);
+  return videoPlaying || (!voice.paused && !voice.ended);
 }
 
 // The song plays only when it is switched on AND no video is playing
@@ -277,6 +341,7 @@ const screens = Array.from(document.querySelectorAll(".screen"));
 function showScreen(target, focusEl) {
   // Stop any video that is still playing on the screen we are leaving
   document.querySelectorAll("video").forEach((v) => v.pause());
+  voice.pause();
 
   // Stop the particle heart's animation loop when she isn't looking at it
   if (target !== finaleScreen) heartAnimating = false;
@@ -485,10 +550,88 @@ nextOathButton.addEventListener("click", () => showScreen(shayariScreen, shayari
 /* =====================================================================
    PAGE 6: my shayari for you
    ===================================================================== */
-SHAYARI.forEach((line) => {
-  const p = document.createElement("p");
-  p.textContent = line;
-  shayariCard.appendChild(p);
+const voiceCaption = document.getElementById("voice-caption");
+const voicePlayer = document.getElementById("voice-player");
+const voicePlay = document.getElementById("voice-play");
+const voiceSeek = document.getElementById("voice-seek");
+const voiceTime = document.getElementById("voice-time");
+const voiceMissing = document.getElementById("voice-missing");
+
+voiceCaption.textContent = VOICE_CAPTION;
+voiceCaption.hidden = !VOICE_CAPTION;
+
+function fmtTime(sec) {
+  if (!isFinite(sec)) return "0:00";
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return m + ":" + String(s).padStart(2, "0");
+}
+
+function updateVoiceUI() {
+  const dur = voice.duration;
+  voiceSeek.value = isFinite(dur) && dur > 0 ? (voice.currentTime / dur) * 100 : 0;
+  voiceTime.textContent = fmtTime(voice.currentTime) + (isFinite(dur) ? " / " + fmtTime(dur) : "");
+}
+
+voicePlay.addEventListener("click", () => {
+  if (voice.paused) {
+    if (voice.ended) voice.currentTime = 0;
+    voice.play().catch(() => {});
+  } else {
+    voice.pause();
+  }
+});
+
+voiceSeek.addEventListener("input", () => {
+  if (isFinite(voice.duration)) voice.currentTime = (voiceSeek.value / 100) * voice.duration;
+});
+
+/* Lock: "Continue" stays locked until she has listened to the whole voice note once.
+   She can pause, and rewind and replay, but she can't skip ahead past the part
+   she has actually heard. */
+const voiceLockHint = document.getElementById("voice-lock-hint");
+let voiceHeard = !REQUIRE_FULL_VOICE_NOTE; // has she listened to all of it?
+let voiceFurthest = 0;                     // the furthest second she has really listened to
+
+nextShayariButton.disabled = !voiceHeard;
+voiceLockHint.hidden = voiceHeard;
+
+function unlockContinue() {
+  if (voiceHeard && !nextShayariButton.disabled) return;
+  voiceHeard = true;
+  nextShayariButton.disabled = false;
+  voiceLockHint.hidden = true;
+  nextShayariButton.classList.add("ready"); // the same little pop as on page 1
+  nextShayariButton.addEventListener("animationend", () => nextShayariButton.classList.remove("ready"), { once: true });
+}
+
+voice.addEventListener("timeupdate", () => {
+  if (!voice.seeking && voice.currentTime > voiceFurthest) voiceFurthest = voice.currentTime;
+});
+
+// Skipping ahead (with the slider or any other control) snaps back to where she had listened up to
+voice.addEventListener("seeking", () => {
+  if (!voiceHeard && voice.currentTime > voiceFurthest + 0.75) voice.currentTime = voiceFurthest;
+});
+
+// Reached the end: unlocked
+voice.addEventListener("ended", unlockContinue);
+
+["play", "pause", "ended"].forEach((evt) => {
+  voice.addEventListener(evt, () => {
+    voicePlayer.classList.toggle("playing", !voice.paused && !voice.ended);
+    voicePlay.setAttribute("aria-label", voice.paused ? "Play voice note" : "Pause voice note");
+    onVideoPlay(); // pauses the song while the voice note plays (resumes it after, if allowed)
+  });
+});
+voice.addEventListener("timeupdate", updateVoiceUI);
+voice.addEventListener("loadedmetadata", updateVoiceUI);
+
+// If the voice note file is missing, say so instead of showing a dead player
+voice.addEventListener("error", () => {
+  voicePlayer.hidden = true;
+  voiceMissing.hidden = false;
+  unlockContinue(); // never leave her stuck on this page if the file can't play
 });
 
 // "Continue to see more" on page 6 opens page 7
@@ -521,37 +664,80 @@ nextLetterButton.addEventListener("click", () => {
    glowing particles, gently beating, drawn on a canvas
    ===================================================================== */
 
-/* The heart as an equation. Anything with heartValue(x, y) <= 0 is INSIDE
-   the heart, so we can fill the whole shape instead of only its outline. */
-function heartValue(x, y) {
-  const a = x * x + y * y - 1;
-  return a * a * a - x * x * y * y * y;
+/* The heart as an equation, in 3D (x = left/right, y = up/down, d = depth).
+   Anything with heartValue(x, y, d) <= 0 is INSIDE the heart. This is the
+   classic 3D heart: puffy in the middle and thin near the top dip and the
+   bottom tip, so it still reads as a heart from every angle while it spins.
+   (Looked at from the front it is exactly the same heart shape as before.) */
+function heartValue(x, y, d) {
+  const a = x * x + 2.25 * d * d + y * y - 1;
+  return a * a * a - x * x * y * y * y - 0.1125 * d * d * y * y * y;
 }
 
-// Picks a random point that lands inside the heart.
-function randomHeartPoint() {
-  for (let i = 0; i < 200; i++) {
-    const x = (Math.random() - 0.5) * 2.7;
-    const y = (Math.random() - 0.5) * 2.9;
-    const f = heartValue(x, y);
-    if (f <= 0) return { x: x, y: y, f: f };
+// Picks a random point inside the heart. maxDepth limits how far front/back it looks.
+function randomHeartPoint(maxDepth) {
+  for (let i = 0; i < 400; i++) {
+    const x = (Math.random() - 0.5) * 2.4;
+    const y = -1.05 + Math.random() * 2.35;
+    const d = (Math.random() * 2 - 1) * maxDepth;
+    const f = heartValue(x, y, d);
+    if (f <= 0) return { x: x, y: y, d: d, f: f };
   }
-  return { x: 0, y: 0, f: -1 };
+  return { x: 0, y: 0, d: 0, f: -1 };
+}
+
+// Roughly how far (in heart units) a point inside the heart is from its skin.
+function distanceToSkin(x, y, d, f) {
+  const a = x * x + 2.25 * d * d + y * y - 1;
+  const gx = 6 * x * a * a - 2 * x * y * y * y;
+  const gy = 6 * y * a * a - 3 * x * x * y * y - 0.3375 * d * d * y * y;
+  const gd = 13.5 * d * a * a - 0.225 * d * y * y * y;
+  const g = Math.sqrt(gx * gx + gy * gy + gd * gd);
+  return g > 1e-9 ? -f / g : 0;
+}
+
+// Picks a random point inside the heart that sits within maxDistance of its skin.
+function randomHeartSkinPoint(maxDistance, maxDepth) {
+  for (let i = 0; i < 60000; i++) {
+    const p = randomHeartPoint(maxDepth);
+    if (distanceToSkin(p.x, p.y, p.d, p.f) < maxDistance) return p;
+  }
+  return randomHeartPoint(maxDepth);
 }
 
 /* --- Tune the look of the heart here ---
-   HEART_PARTICLE_COUNT = how packed the body is. 17000 gives a very
-     dense, near-solid heart of red/pink pixels. Drop to about 8000
-     if it feels slow on her phone.
+   HEART_PARTICLE_COUNT = how packed the body is. With the pixel size below,
+     17000 covers roughly 90% of the heart from every side while it spins.
+     Drop to about 10000 if it feels slow on her phone. (Going far above
+     20000 can make phones stutter, so make the pixels bigger instead.)
+   HEART_PIXEL_SIZE = size of each little square. 1 = as it is now, bigger
+     (1.2) = more solid but chunkier, smaller (0.8) = finer but more gaps.
    HEART_EDGE_COUNT = a thin bright rim around the edge, mostly pink/red
      (only a few particles are white, so the rim reads as a highlight,
      not a white outline).
-   EDGE_THICKNESS = how thick that rim is. Closer to 0 = thin and crisp
-     (try -0.02), further from 0 = thick and glowy (try -0.10). */
+   EDGE_THICKNESS = how thick that rim is. Smaller = thin and crisp
+     (try 0.015), bigger = thick and glowy (try 0.06).
+   SKIN_THICKNESS = how thick the shell of particles that makes the heart
+     look solid is. Smaller = crisper surface, bigger = fuzzier.
+   HEART_ROTATE_SECONDS = how many seconds one full turn takes.
+     Bigger = slower (try 14). 0 = the heart stays still.
+   HEART_DEPTH = how puffy the heart is from front to back. 1 is the
+     natural 3D heart; 0.7 is flatter; 1.3 is chubbier.
+   HEART_PERSPECTIVE = how much closer parts look bigger while it spins.
+     0 = flat, no perspective. 0.05 is gentle. */
 const HEART_PARTICLE_COUNT = 17000;
 const HEART_EDGE_COUNT = 2700;
-const EDGE_THICKNESS = -0.04;
+const HEART_PIXEL_SIZE = 1;
+const EDGE_THICKNESS = 0.03;
+const SKIN_THICKNESS = 0.02;
 const HEART_SPARKLE_COUNT = 40;
+const HEART_ROTATE_SECONDS = 9;
+const HEART_DEPTH = 1;
+const HEART_PERSPECTIVE = 0.05;
+
+const HEART_SURFACE_SHARE = 0.8;  // share of particles that sit on the skin of the heart; the rest fill the inside
+const HEART_SHADE_LEVELS = 6;     // how many brightness steps from the far side to the near side
+const HEART_SHADE_MIN = 0.6;     // brightness of the farthest particles (1 = same as the nearest)
 
 // Reds and pinks for the body — deep red/crimson mixed with hot pink
 const HEART_PINKS = [
@@ -561,54 +747,90 @@ const HEART_PINKS = [
 // The rim is mostly pink/red too, with just a few brighter highlights
 const HEART_EDGE_COLORS = ["#FF3D6B", "#FF7FAC", "#FFB3CB", "#FFFFFF"];
 
+// One list of every color; body colors first, then the rim colors
+const HEART_PALETTE = HEART_PINKS.concat(HEART_EDGE_COLORS);
+const HEART_WHITE_INDEX = HEART_PALETTE.length - 1;
+
+// Pre-made darker versions of each color, so far-away particles look farther away
+const HEART_SHADED = [];
+for (let level = 0; level < HEART_SHADE_LEVELS; level++) {
+  const k = HEART_SHADE_MIN + (1 - HEART_SHADE_MIN) * (level / (HEART_SHADE_LEVELS - 1));
+  HEART_SHADED.push(HEART_PALETTE.map((hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    // fade toward a deep crimson (not black), so far-away white sparkles turn dusty pink, not grey
+    const r = Math.round(90 + (((n >> 16) & 255) - 90) * k);
+    const g = Math.round(0 + (((n >> 8) & 255) - 0) * k);
+    const b = Math.round(30 + ((n & 255) - 30) * k);
+    return "rgb(" + r + "," + g + "," + b + ")";
+  }));
+}
+
 let heartCtx = null;
-let heartParticles = [];
 let heartSparkles = [];
 let heartFrame = 0;
+let heartAngle = 0;        // how far the heart has turned, in radians
+let heartLastTime = 0;
 let heartAnimating = false;
 let heartResizeObserver = null;
 
-function pickEdgeColor() {
+// The particles, stored as plain number lists (fast to spin every frame)
+let heartCount = 0;
+let pX, pY, pZ, pSize, pAngle, pDriftRadius, pDriftSpeed, pTwPhase, pTwAmount, pColor;
+let sX, sY, sSize;         // where each particle lands on screen this frame
+let heartBuckets = [];     // particles grouped by (brightness level, color), drawn far to near
+
+function pickEdgeColorIndex() {
   // Only about 1 in 8 edge particles is white — the rim should glow
   // pink/red, not read as a white outline.
-  if (Math.random() < 0.12) return "#FFFFFF";
-  const reds = HEART_EDGE_COLORS.slice(0, 3);
-  return reds[Math.floor(Math.random() * reds.length)];
+  if (Math.random() < 0.12) return HEART_WHITE_INDEX;
+  return HEART_PINKS.length + Math.floor(Math.random() * 3);
 }
 
-function makeParticle(point, isEdge) {
-  return {
-    homeX: point.x,
-    homeY: point.y,
-    angle: Math.random() * Math.PI * 2,
-    driftRadius: isEdge ? 0.3 + Math.random() * 0.5 : 0.4 + Math.random() * 1.1,
-    driftSpeed: 0.008 + Math.random() * 0.018,
-    size: isEdge ? 1 + Math.random() * 1.4 : 1.3 + Math.random() * 2.1,
-    color: isEdge ? pickEdgeColor() : HEART_PINKS[Math.floor(Math.random() * HEART_PINKS.length)],
-    twinklePhase: Math.random() * Math.PI * 2,
-    twinkleAmount: isEdge ? 0.2 : 0.3
-  };
+function setParticle(i, point, isEdge) {
+  pX[i] = point.x;
+  pY[i] = point.y;
+  pZ[i] = point.d * HEART_DEPTH;
+  pAngle[i] = Math.random() * Math.PI * 2;
+  pDriftRadius[i] = isEdge ? 0.3 + Math.random() * 0.5 : 0.4 + Math.random() * 1.1;
+  pDriftSpeed[i] = 0.008 + Math.random() * 0.018;
+  pSize[i] = HEART_PIXEL_SIZE * (isEdge ? 1.4 + Math.random() * 1.4 : 2.0 + Math.random() * 2.4);
+  pColor[i] = isEdge ? pickEdgeColorIndex() : Math.floor(Math.random() * HEART_PINKS.length);
+  pTwPhase[i] = Math.random() * Math.PI * 2;
+  pTwAmount[i] = isEdge ? 0.25 : 0.2;
 }
 
 function buildHeartParticles() {
-  heartParticles = [];
+  heartCount = HEART_PARTICLE_COUNT + HEART_EDGE_COUNT;
+  pX = new Float32Array(heartCount);
+  pY = new Float32Array(heartCount);
+  pZ = new Float32Array(heartCount);
+  pSize = new Float32Array(heartCount);
+  pAngle = new Float32Array(heartCount);
+  pDriftRadius = new Float32Array(heartCount);
+  pDriftSpeed = new Float32Array(heartCount);
+  pTwPhase = new Float32Array(heartCount);
+  pTwAmount = new Float32Array(heartCount);
+  pColor = new Uint8Array(heartCount);
+  sX = new Float32Array(heartCount);
+  sY = new Float32Array(heartCount);
+  sSize = new Float32Array(heartCount);
 
-  // the filled body of the heart
+  let n = 0;
+
+  // the body of the heart: most particles sit on the skin (so it looks solid), the rest fill the inside
+  const skinCount = Math.round(HEART_PARTICLE_COUNT * HEART_SURFACE_SHARE);
   for (let i = 0; i < HEART_PARTICLE_COUNT; i++) {
-    heartParticles.push(makeParticle(randomHeartPoint(), false));
+    setParticle(n++, i < skinCount ? randomHeartSkinPoint(SKIN_THICKNESS, 0.7) : randomHeartPoint(0.7), false);
   }
 
-  // the glowing rim: keep only the points that sit close to the outline
-  let made = 0;
-  let tries = 0;
-  while (made < HEART_EDGE_COUNT && tries < HEART_EDGE_COUNT * 200) {
-    tries++;
-    const p = randomHeartPoint();
-    if (p.f > EDGE_THICKNESS) {
-      heartParticles.push(makeParticle(p, true));
-      made++;
-    }
+  // the glowing rim: the seam running around the outline, halfway between front and back
+  for (let i = 0; i < HEART_EDGE_COUNT; i++) {
+    setParticle(n++, randomHeartSkinPoint(EDGE_THICKNESS, 0.12), true);
   }
+  heartCount = n;
+
+  heartBuckets = [];
+  for (let i = 0; i < HEART_SHADE_LEVELS * HEART_PALETTE.length; i++) heartBuckets.push([]);
 
   // little sparkles floating around the heart
   heartSparkles = [];
@@ -623,7 +845,7 @@ function buildHeartParticles() {
   }
 }
 
-function drawHeartFrame() {
+function drawHeartFrame(now) {
   const canvas = heartCanvas;
   const cssWidth = canvas.clientWidth;
   const cssHeight = canvas.clientHeight;
@@ -647,7 +869,6 @@ function drawHeartFrame() {
   const cy = cssHeight / 2 + Math.min(cssWidth, cssHeight) * 0.02;
 
   heartCtx.save();
-  heartCtx.globalCompositeOperation = "lighter";
 
   // sparkles first, so the heart sits on top of them
   heartCtx.fillStyle = "#FFFFFF";
@@ -658,23 +879,57 @@ function drawHeartFrame() {
     heartCtx.fill();
   });
 
-  // the heart itself
-  for (let i = 0; i < heartParticles.length; i++) {
-    const p = heartParticles[i];
-    const drift = p.driftRadius * Math.sin(heartFrame * p.driftSpeed + p.angle);
-    const px = cx + p.homeX * scale * beat + Math.cos(p.angle) * drift;
-    const py = cy - p.homeY * scale * beat + Math.sin(p.angle) * drift;
+  // Turn every particle around the heart's upright axis, then sort them into
+  // brightness groups (far = darker, near = brighter)
+  const cosA = Math.cos(heartAngle);
+  const sinA = Math.sin(heartAngle);
+  const paletteSize = HEART_PALETTE.length;
+  for (let b = 0; b < heartBuckets.length; b++) heartBuckets[b].length = 0;
 
-    heartCtx.globalAlpha =
-      (1 - p.twinkleAmount) + p.twinkleAmount * Math.sin(heartFrame * 0.05 + p.twinklePhase);
-    heartCtx.fillStyle = p.color;
-    heartCtx.fillRect(px, py, p.size, p.size); // squares, not circles — much faster on phones
+  for (let i = 0; i < heartCount; i++) {
+    const x = pX[i] * beat;
+    const y = pY[i] * beat;
+    const z = pZ[i] * beat;
+    const xr = x * cosA + z * sinA;
+    const zr = -x * sinA + z * cosA;          // bigger = closer to her
+    const persp = 1 / (1 - HEART_PERSPECTIVE * zr);
+    const drift = pDriftRadius[i] * Math.sin(heartFrame * pDriftSpeed[i] + pAngle[i]);
+
+    sX[i] = cx + xr * persp * scale + Math.cos(pAngle[i]) * drift;
+    sY[i] = cy - y * persp * scale + Math.sin(pAngle[i]) * drift;
+    sSize[i] = pSize[i] * persp;
+
+    let level = Math.floor((zr / 0.75 * 0.5 + 0.5) * HEART_SHADE_LEVELS);
+    if (level < 0) level = 0;
+    else if (level >= HEART_SHADE_LEVELS) level = HEART_SHADE_LEVELS - 1;
+    heartBuckets[level * paletteSize + pColor[i]].push(i);
+  }
+
+  // Draw far to near. Squares, not circles — much faster on phones.
+  for (let level = 0; level < HEART_SHADE_LEVELS; level++) {
+    for (let c = 0; c < paletteSize; c++) {
+      const list = heartBuckets[level * paletteSize + c];
+      if (!list.length) continue;
+      heartCtx.fillStyle = HEART_SHADED[level][c];
+      for (let j = 0; j < list.length; j++) {
+        const i = list[j];
+        heartCtx.globalAlpha = 1 - pTwAmount[i] * (0.5 + 0.5 * Math.sin(heartFrame * 0.05 + pTwPhase[i]));
+        heartCtx.fillRect(sX[i], sY[i], sSize[i], sSize[i]);
+      }
+    }
   }
 
   heartCtx.restore();
 
   heartFrame++;
-  if (heartAnimating) requestAnimationFrame(drawHeartFrame);
+  if (heartAnimating) {
+    // turn by time (not by frame count) so it spins at the same speed on any screen
+    const t = typeof now === "number" ? now : performance.now();
+    const dt = heartLastTime ? Math.min(t - heartLastTime, 50) : 16;
+    heartLastTime = t;
+    if (HEART_ROTATE_SECONDS > 0) heartAngle += (dt / 1000) * (Math.PI * 2 / HEART_ROTATE_SECONDS);
+    requestAnimationFrame(drawHeartFrame);
+  }
 }
 
 function resizeHeartCanvas() {
@@ -711,6 +966,7 @@ let finaleStarted = false;
 function enterFinale() {
   if (finaleStarted) {
     heartAnimating = true;
+    heartLastTime = 0;
     requestAnimationFrame(drawHeartFrame);
     return;
   }
@@ -727,6 +983,7 @@ function enterFinale() {
   }
 
   heartAnimating = true;
+  heartLastTime = 0;
   requestAnimationFrame(drawHeartFrame);
 }
 
